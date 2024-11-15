@@ -1,18 +1,18 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-    body {
-        width: 100vw;
-        height: 100vh;
-        background-color: #fff;
-        font-family: Arial, sans-serif;
-    }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    width: 100vw;
+    height: 100vh;
+    background-color: #f0f2f5;
+  }
 `;
 
 export default GlobalStyle;
