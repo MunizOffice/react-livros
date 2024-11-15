@@ -52,7 +52,7 @@ const Signin = () => {
       return;
     }
 
-    navigate("/home");
+    navigate("/");
   };
 
   return (

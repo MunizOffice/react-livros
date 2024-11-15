@@ -6,15 +6,12 @@ import { AuthProvider } from "./Authentication/auth";
 import GlobalStyle from "./Styles/global";
 
 const App = () => (
-  <>
-    <Main />
-  </>
-  /*
+
   <AuthProvider>
     <RoutesApp />
     <GlobalStyle />
   </AuthProvider>
-  */
+
 );
 
 export default App;

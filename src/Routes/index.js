@@ -1,9 +1,9 @@
 import { Fragment } from "react";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
-import Home from "../Pages/Home";
 import Signin from "../Pages/Signin";
 import Signup from "../Pages/Signup";
+import Main from "../BooksSearch/Main"; // Importe o Main
 
 const PrivateRoute = ({ element: Component }) => {
   const { signed } = useAuth();
@@ -13,16 +13,15 @@ const PrivateRoute = ({ element: Component }) => {
 
 const RoutesApp = () => {
   return (
-    <BrowserRouter>
-      <Fragment>
-        <Routes>
-          <Route path="/home" element={<PrivateRoute element={Home} />} />
-          <Route path="/" element={<Signin />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </Fragment>
-    </BrowserRouter>
+    <Fragment>
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route path="/" element={<PrivateRoute element={Main} />} />
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Fragment>
   );
 };
 
