@@ -1,5 +1,28 @@
 import styled from "styled-components";
 
+export const BackButton = styled.button`
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+
+  &:active {
+    background-color: #003f7f;
+  }
+`;
+
 export const Container = styled.div`
   height: 100vh;
   display: flex;

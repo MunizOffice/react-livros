@@ -3,47 +3,64 @@ import { FiSearch } from "react-icons/fi";
 import axios from "axios";
 import Card from "./Card";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../Hooks/useAuth";
 
 const Main = () => {
     const [search, setSearch] = useState("");
     const [bookData, setData] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
+    const [error, setError] = useState(""); // Estado para armazenar o erro
     const navigate = useNavigate();
     const suggestionsRef = useRef(null);
     const inputRef = useRef(null);
+    const { user, signout } = useAuth(); // Pega o estado de autenticação do usuário e função para logout
 
-    // Função para buscar livros
     const fetchBooks = (query, maxResults = 10) => {
         return axios
             .get(
                 `https://www.googleapis.com/books/v1/volumes?q=${query}&key=AIzaSyCtLJQLGq6ZtyBFFaF2FDiv2-_2c4vrUB0&maxResults=${maxResults}`
             )
             .then((response) => response.data.items)
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                console.log(err);
+                throw new Error("Erro ao buscar livros. Tente novamente.");
+            });
     };
 
-    // Buscar livros "best sellers" ao inicializar
     useEffect(() => {
-        fetchBooks("best+sellers", 10).then((books) => setData(books));
-    }, []);
+        // Carregar uma lista padrão de livros se o usuário estiver logado
+        if (user) {
+            fetchBooks("best+sellers", 10)
+                .then((books) => setData(books))
+                .catch(() => setError("Erro ao carregar os melhores livros."));
+        }
+    }, [user]);
 
     const fetchSuggestions = useCallback(() => {
-        fetchBooks(search, 40).then((books) => {
-            const booksSuggestions = books.map((item) => ({
-                title: item.volumeInfo.title,
-                thumbnail: item.volumeInfo.imageLinks?.smallThumbnail,
-            }));
-            setSuggestions(booksSuggestions);
-        });
-    }, [search]);
+        if (!user) {
+            setError("Você precisa estar logado para ver sugestões.");
+            return;
+        }
+
+        fetchBooks(search, 40)
+            .then((books) => {
+                const booksSuggestions = books.map((item) => ({
+                    title: item.volumeInfo.title,
+                    thumbnail: item.volumeInfo.imageLinks?.smallThumbnail,
+                }));
+                setSuggestions(booksSuggestions);
+                setError(""); // Limpa o erro se a busca foi bem-sucedida
+            })
+            .catch(() => setError("Não foi possível carregar as sugestões."));
+    }, [search, user]);
 
     useEffect(() => {
-        if (search.length > 1) {
+        if (search.length > 1 && user) {
             fetchSuggestions();
         } else {
             setSuggestions([]);
         }
-    }, [search, fetchSuggestions]);
+    }, [search, fetchSuggestions, user]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -65,13 +82,27 @@ const Main = () => {
 
     const searchBook = (evt) => {
         if (evt.key === "Enter") {
-            fetchBooks(search, 40).then((books) => setData(books));
-            setSuggestions([]);
+            if (!user) {
+                setError("Você precisa estar logado para buscar livros."); // Bloqueia busca para não logados
+                return;
+            }
+
+            if (search.trim() === "") {
+                setError("Por favor, preencha o campo de busca.");
+                return;
+            }
+            fetchBooks(search, 40)
+                .then((books) => {
+                    setData(books);
+                    setError(""); // Limpa o erro em caso de sucesso
+                    setSuggestions([]);
+                })
+                .catch(() => setError("Erro ao buscar livros. Tente novamente."));
         }
     };
 
     const handleInputClick = () => {
-        if (search.length > 1) {
+        if (search.length > 1 && user) {
             fetchSuggestions();
         }
     };
@@ -80,11 +111,31 @@ const Main = () => {
         navigate("/signin");
     };
 
+    const goToRegistro = () => {
+        navigate("/signup");
+    };
+
     return (
         <>
             <div className="header">
                 <div className="row2">
-                    <h2>Ache seu livro...</h2>
+                    <div className="logo">
+                        <h2>Buscador de Livros</h2>
+                        {!user ? (
+                            <>
+                                <button onClick={goToLogin} className="button login">
+                                    Login
+                                </button>
+                                <button onClick={goToRegistro} className="button registro">
+                                    Registre-se
+                                </button>
+                            </>
+                        ) : (
+                            <button onClick={() => signout()} className="button logout">
+                                Logout
+                            </button>
+                        )}
+                    </div>
                     <div className="search">
                         <input
                             type="text"
@@ -94,11 +145,13 @@ const Main = () => {
                             onChange={(e) => setSearch(e.target.value)}
                             onKeyDown={searchBook}
                             onClick={handleInputClick}
+                            disabled={!user} // Desabilita o campo de busca para não logados
                         />
                         <button className="search">
                             <FiSearch size={25} color="#000" />
                         </button>
                     </div>
+                    {error && <span className="error-label">{error}</span>} {/* Exibe o erro */}
                     {suggestions.length > 0 && (
                         <ul className="suggestions" ref={suggestionsRef}>
                             {suggestions.map((book, index) => (
@@ -118,9 +171,6 @@ const Main = () => {
                         </ul>
                     )}
                 </div>
-                <button onClick={goToLogin} className="login-button">
-                    Login
-                </button>
             </div>
 
             <div className="container">

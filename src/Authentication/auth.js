@@ -56,6 +56,11 @@ export const AuthProvider = ({ children }) => {
 
     localStorage.setItem("users_bd", JSON.stringify(newUser));
 
+    // Faz o login automaticamente
+    const token = Math.random().toString(36).substring(2);
+    localStorage.setItem("user_token", JSON.stringify({ email, token }));
+    setUser({ email, password });
+
     return;
   };
 

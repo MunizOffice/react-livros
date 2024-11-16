@@ -55,38 +55,47 @@ const Signin = () => {
     navigate("/");
   };
 
+  const handleGoBack = () => {
+    navigate("/");
+  };
+
   return (
-    <C.Container>
-      <C.Label>LOGIN</C.Label>
-      <C.Content>
-        <Input
-          type="email"
-          placeholder="Digite o seu E-mail"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        {emailError && <C.labelError>{emailError}</C.labelError>}
+    <>
+      <C.BackButton onClick={handleGoBack}>
+        Voltar para a página inicial
+      </C.BackButton>
+      <C.Container>
+        <C.Label>FAÇA SEU LOGIN</C.Label>
+        <C.Content>
+          <Input
+            type="email"
+            placeholder="Digite o seu E-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          {emailError && <C.labelError>{emailError}</C.labelError>}
 
-        <Input
-          type="password"
-          placeholder="Digite a sua Senha"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-        />
-        {senhaError && <C.labelError>{senhaError}</C.labelError>}
+          <Input
+            type="password"
+            placeholder="Digite a sua Senha"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+          />
+          {senhaError && <C.labelError>{senhaError}</C.labelError>}
 
-        {error && <C.labelError>{error}</C.labelError>}
+          {error && <C.labelError>{error}</C.labelError>}
 
-        <Button Text="Entrar" onClick={handleLogin} />
+          <Button Text="Entrar" onClick={handleLogin} />
 
-        <C.LabelSignup>
-          Não tem uma conta?
-          <C.Strong>
-            <Link to="/signup">&nbsp;Registre-se</Link>
-          </C.Strong>
-        </C.LabelSignup>
-      </C.Content>
-    </C.Container>
+          <C.LabelSignup>
+            Não tem uma conta?
+            <C.Strong>
+              <Link to="/signup">&nbsp;Registre-se</Link>
+            </C.Strong>
+          </C.LabelSignup>
+        </C.Content>
+      </C.Container>
+    </>
   );
 };
 

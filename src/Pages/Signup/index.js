@@ -65,46 +65,55 @@ const Signup = () => {
     navigate("/");
   };
 
+  const handleGoBack = () => {
+    navigate("/");
+  };
+
   return (
-    <C.Container>
-      <C.Label>SISTEMA DE LOGIN</C.Label>
-      <C.Content>
-        <Input
-          type="email"
-          placeholder="Digite seu E-mail"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        {emailError && <C.labelError>{emailError}</C.labelError>}
+    <>
+      <C.BackButton onClick={handleGoBack}>
+        Voltar para a página inicial
+      </C.BackButton>
+      <C.Container>
+        <C.Label>FAÇA SEU CADASTRO</C.Label>
+        <C.Content>
+          <Input
+            type="email"
+            placeholder="Digite seu E-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          {emailError && <C.labelError>{emailError}</C.labelError>}
 
-        <Input
-          type="email"
-          placeholder="Confirme seu E-mail"
-          value={emailConf}
-          onChange={(e) => setEmailConf(e.target.value)}
-        />
-        {emailConfError && <C.labelError>{emailConfError}</C.labelError>}
+          <Input
+            type="email"
+            placeholder="Confirme seu E-mail"
+            value={emailConf}
+            onChange={(e) => setEmailConf(e.target.value)}
+          />
+          {emailConfError && <C.labelError>{emailConfError}</C.labelError>}
 
-        <Input
-          type="password"
-          placeholder="Digite sua Senha"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-        />
-        {senhaError && <C.labelError>{senhaError}</C.labelError>}
+          <Input
+            type="password"
+            placeholder="Digite sua Senha"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+          />
+          {senhaError && <C.labelError>{senhaError}</C.labelError>}
 
-        {error && <C.labelError>{error}</C.labelError>}
+          {error && <C.labelError>{error}</C.labelError>}
 
-        <Button Text="Inscrever-se" onClick={handleSignup} />
+          <Button Text="Inscrever-se" onClick={handleSignup} />
 
-        <C.LabelSignin>
-          Já tem uma conta?
-          <C.Strong>
-            <Link to="/">&nbsp;Entre</Link>
-          </C.Strong>
-        </C.LabelSignin>
-      </C.Content>
-    </C.Container>
+          <C.LabelSignin>
+            Já tem uma conta?
+            <C.Strong>
+              <Link to="/">&nbsp;Entre</Link>
+            </C.Strong>
+          </C.LabelSignin>
+        </C.Content>
+      </C.Container>
+    </>
   );
 };
 
