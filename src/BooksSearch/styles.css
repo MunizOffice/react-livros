@@ -69,7 +69,6 @@ html {
     display: flex;
     align-items: center;
     gap: 10px;
-    /* Ajuste o espaçamento entre os itens */
 }
 
 .button {
@@ -123,30 +122,58 @@ html {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: 20px;
+    position: relative;
+    gap: 0;
 }
 
 .search input {
     border: 1px solid #afafaf;
     width: 50%;
-    height: 35px;
+    height: 40px;
     padding: 0 1rem;
     font-size: 15px;
     font-weight: bold;
-    border: 0;
-    outline: 0;
+    border: none;
+    outline: none;
+    border-radius: 5px 0 0 5px;
+    box-sizing: border-box;
 }
 
 .search button {
-    width: 35px;
-    height: 35px;
-    padding: 0 0.5rem;
+    width: 40px;
+    height: 40px;
+    margin: 0;
+    padding: 0;
     border: none;
     outline: none;
+    background-color: #c2c2c2;
+    color: white;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
 .error-label {
     color: rgb(255, 63, 63);
     font-size: 20px;
+}
+
+.error-message {
+    color: rgb(255, 63, 63);
+    background-color: rgba(255, 63, 63, 0.1);
+    padding: 10px;
+    border: 1px solid rgb(255, 63, 63);
+    border-radius: 5px;
+    margin: 10px auto;
+    width: 50%;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .suggestions {
@@ -163,6 +190,9 @@ html {
     border-bottom-right-radius: 6px;
     overflow-y: auto;
     z-index: 10;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }
 
 .suggestions li {
@@ -306,4 +336,34 @@ html {
     margin-top: 2rem;
     text-align: justify;
     font-size: 13px;
+}
+
+@media (max-width: 768px) {
+
+    .login,
+    .logout {
+        margin-left: auto;
+        /* Remove o deslocamento lateral */
+        margin-right: auto;
+        /* Centraliza os botões */
+        display: flex;
+        justify-content: center;
+        /* Alinha no centro */
+    }
+
+    .button {
+        max-width: 100%;
+        /* Garante que o botão não ultrapasse a largura do container */
+        padding: 12px 16px;
+        /* Ajusta o tamanho */
+        font-size: 14px;
+        /* Reduz o tamanho do texto */
+    }
+}
+
+@media (max-width: 480px) {
+    .row2 h2 {
+        font-size: 1.8rem;
+        /* Reduz o tamanho do título */
+    }
 }

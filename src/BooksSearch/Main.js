@@ -9,22 +9,26 @@ const Main = () => {
     const [search, setSearch] = useState("");
     const [bookData, setData] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
-    const [error, setError] = useState(""); // Estado para armazenar o erro
+    const [error, setError] = useState(""); // Estado para mensagens de erro
     const navigate = useNavigate();
     const suggestionsRef = useRef(null);
     const inputRef = useRef(null);
     const { user, signout } = useAuth(); // Pega o estado de autenticação do usuário e função para logout
-
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
         // Verificar se o usuário está logado
         if (user) {
-            setIsLoggedIn(true); // Usuário logado
+            setIsLoggedIn(true);
         } else {
-            setIsLoggedIn(false); // Usuário não logado
+            setIsLoggedIn(false);
         }
     }, [user]);
+
+    const handleError = (message) => {
+        setError(message);
+        setTimeout(() => setError(""), 5000); // Limpa o erro após 5 segundos
+    };
 
     const fetchBooks = (query, maxResults = 10) => {
         return axios
@@ -33,23 +37,28 @@ const Main = () => {
             )
             .then((response) => response.data.items)
             .catch((err) => {
-                console.log(err);
-                throw new Error("Erro ao buscar livros. Tente novamente.");
+                console.error(err);
+                if (err.response) {
+                    throw new Error("Erro ao acessar a API. Tente novamente.");
+                } else if (err.request) {
+                    throw new Error("Sem resposta do servidor. Verifique sua conexão.");
+                } else {
+                    throw new Error("Erro inesperado. Tente novamente.");
+                }
             });
     };
 
     useEffect(() => {
-        // Carregar uma lista padrão de livros se o usuário estiver logado
         if (user) {
             fetchBooks("best+sellers", 10)
                 .then((books) => setData(books))
-                .catch(() => setError("Erro ao carregar os melhores livros."));
+                .catch(() => handleError("Erro ao carregar os melhores livros."));
         }
     }, [user]);
 
     const fetchSuggestions = useCallback(() => {
         if (!user) {
-            setError("Você precisa estar logado para ver sugestões.");
+            handleError("Você precisa estar logado para ver sugestões.");
             return;
         }
 
@@ -62,7 +71,7 @@ const Main = () => {
                 setSuggestions(booksSuggestions);
                 setError(""); // Limpa o erro se a busca foi bem-sucedida
             })
-            .catch(() => setError("Não foi possível carregar as sugestões."));
+            .catch(() => handleError("Não foi possível carregar as sugestões."));
     }, [search, user]);
 
     useEffect(() => {
@@ -92,14 +101,14 @@ const Main = () => {
     }, []);
 
     const searchBook = (evt) => {
-        if (evt.key === "Enter" || evt.key === undefined) { // Permite cliques no botão
+        if (evt.key === "Enter" || evt.key === undefined) {
             if (!user) {
-                setError("Você precisa estar logado para buscar livros."); // Bloqueia busca para não logados
+                handleError("Você precisa estar logado para buscar livros.");
                 return;
             }
 
             if (search.trim() === "") {
-                setError("Por favor, preencha o campo de busca.");
+                handleError("Por favor, preencha o campo de busca.");
                 return;
             }
 
@@ -109,7 +118,7 @@ const Main = () => {
                     setError(""); // Limpa o erro em caso de sucesso
                     setSuggestions([]);
                 })
-                .catch(() => setError("Erro ao buscar livros. Tente novamente."));
+                .catch(() => handleError("Erro ao buscar livros. Tente novamente."));
         }
     };
 
@@ -149,7 +158,7 @@ const Main = () => {
                         )}
                     </div>
                     <span className={`connected-label ${user ? 'connected' : 'disconnected'}`}>
-                        {user ? "Conectado - Busca liberada" : "Desconectado - Faça Login"}
+                        {user ? "Conectado" : "Desconectado"}
                     </span>
                     <div className="search">
                         <input
@@ -160,13 +169,17 @@ const Main = () => {
                             onChange={(e) => setSearch(e.target.value)}
                             onKeyDown={searchBook}
                             onClick={handleInputClick}
-                            disabled={!user} // Desabilita o campo de busca para não logados
                         />
                         <button className="search" onClick={() => searchBook({ key: "Enter" })}>
                             <FiSearch size={25} color="#000" />
                         </button>
                     </div>
-                    {error && <span className="error-label">{error}</span>} {/* Exibe o erro */}
+                    {error && (
+                        <div className="error-message">
+                            <h4>Erro:</h4>
+                            <p>{error}</p>
+                        </div>
+                    )}
                     {suggestions.length > 0 && (
                         <ul className="suggestions" ref={suggestionsRef}>
                             {suggestions.map((book, index) => (
