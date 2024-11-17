@@ -3,8 +3,9 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 import Signin from "../Pages/Signin";
 import Signup from "../Pages/Signup";
-import Main from "../BooksSearch/Main"; // Importe o Main
+import Main from "../BooksSearch/Main";
 
+// Verifica a autenticação e redireciona se necessário.
 const PrivateRoute = ({ element: Component }) => {
   const { signed } = useAuth();
 

@@ -73,6 +73,7 @@ const Signup = () => {
     navigate("/");
   };
 
+  // Voltar para a página inicial
   const handleGoBack = () => {
     navigate("/");
   };

@@ -5,7 +5,10 @@ const Modal = ({ show, item, onClose }) => {
     if (!show) {
         return null;
     }
+
+    // Obtém a miniatura do livro, se disponível.
     let thumbnail = item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.smallThumbnail;
+
     return (
         <>
             <div className="overlay">

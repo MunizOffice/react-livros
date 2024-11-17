@@ -64,6 +64,7 @@ const Signin = () => {
     navigate("/");
   };
 
+  // Voltar para a página inicial
   const handleGoBack = () => {
     navigate("/");
   };

@@ -4,84 +4,84 @@ import axios from "axios";
 import Card from "./Card";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
+import debounce from "lodash.debounce";
 
 const Main = () => {
     const [search, setSearch] = useState("");
     const [bookData, setData] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
-    const [error, setError] = useState(""); // Estado para mensagens de erro
+    const [error, setError] = useState("");
     const navigate = useNavigate();
     const suggestionsRef = useRef(null);
     const inputRef = useRef(null);
-    const { user, signout } = useAuth(); // Pega o estado de autenticação do usuário e função para logout
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { user, signout } = useAuth();
 
-    useEffect(() => {
-        // Verificar se o usuário está logado
-        if (user) {
-            setIsLoggedIn(true);
-        } else {
-            setIsLoggedIn(false);
-        }
-    }, [user]);
-
-    const handleError = (message) => {
+    // Função para centralizar tratamento de erros
+    const handleError = useCallback((message) => {
         setError(message);
-        setTimeout(() => setError(""), 5000); // Limpa o erro após 5 segundos
-    };
+        setSuggestions([]); // Limpa as sugestões sempre que há um erro
+    }, []);
 
-    const fetchBooks = (query, maxResults = 10) => {
-        return axios
-            .get(
+    // Função de fetchBooks movida para fora do useEffect
+    const fetchBooks = useCallback(async (query, maxResults = 10) => {
+        try {
+            const response = await axios.get(
                 `https://www.googleapis.com/books/v1/volumes?q=${query}&key=AIzaSyCtLJQLGq6ZtyBFFaF2FDiv2-_2c4vrUB0&maxResults=${maxResults}`
-            )
-            .then((response) => response.data.items)
-            .catch((err) => {
-                console.error(err);
-                if (err.response) {
-                    throw new Error("Erro ao acessar a API. Tente novamente.");
-                } else if (err.request) {
-                    throw new Error("Sem resposta do servidor. Verifique sua conexão.");
-                } else {
-                    throw new Error("Erro inesperado. Tente novamente.");
-                }
-            });
-    };
+            );
+            return response.data.items;
+        } catch (err) {
+            console.error(err);
+            if (err.response) {
+                handleError("Erro ao acessar a API. Tente novamente.");
+            } else if (err.request) {
+                handleError("Sem resposta do servidor. Verifique sua conexão.");
+            } else {
+                handleError("Erro inesperado. Tente novamente.");
+            }
+        }
+    }, [handleError]);
 
+    // Chamada inicial para livros mais vendidos
     useEffect(() => {
         if (user) {
             fetchBooks("best+sellers", 10)
-                .then((books) => setData(books))
+                .then(setData)
                 .catch(() => handleError("Erro ao carregar os melhores livros."));
         }
-    }, [user]);
+    }, [user, fetchBooks, handleError]); // 'fetchBooks' como dependência
 
-    const fetchSuggestions = useCallback(() => {
-        if (!user) {
-            handleError("Você precisa estar logado para ver sugestões.");
-            return;
-        }
-
-        fetchBooks(search, 40)
-            .then((books) => {
-                const booksSuggestions = books.map((item) => ({
+    // Use useCallback diretamente dentro de useEffect para evitar warnings
+    useEffect(() => {
+        const fetchSuggestions = debounce(async (query) => {
+            if (!user) {
+                handleError("Você precisa estar logado para ver sugestões.");
+                return;
+            }
+            try {
+                const books = await fetchBooks(query, 40);
+                const bookSuggestions = books.map((item) => ({
                     title: item.volumeInfo.title,
                     thumbnail: item.volumeInfo.imageLinks?.smallThumbnail,
                 }));
-                setSuggestions(booksSuggestions);
-                setError(""); // Limpa o erro se a busca foi bem-sucedida
-            })
-            .catch(() => handleError("Não foi possível carregar as sugestões."));
-    }, [search, user]);
+                setSuggestions(bookSuggestions);
+                setError(""); // Limpa o erro em caso de sucesso
+            } catch (e) {
+                handleError("Não foi possível carregar as sugestões.");
+            }
+        }, 500);
 
-    useEffect(() => {
         if (search.length > 1 && user) {
-            fetchSuggestions();
+            fetchSuggestions(search);
         } else {
             setSuggestions([]);
         }
-    }, [search, fetchSuggestions, user]);
 
+        return () => {
+            fetchSuggestions.cancel(); // Limpeza do debounce quando o componente for desmontado
+        };
+    }, [search, user, fetchBooks, handleError]); // 'fetchBooks' como dependência
+
+    // Detecta cliques fora do input e da lista de sugestões para limpar as sugestões
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (
@@ -100,6 +100,7 @@ const Main = () => {
         };
     }, []);
 
+    // Função para realizar a pesquisa de livros ao pressionar "Enter"
     const searchBook = (evt) => {
         if (evt.key === "Enter" || evt.key === undefined) {
             if (!user) {
@@ -114,27 +115,17 @@ const Main = () => {
 
             fetchBooks(search, 40)
                 .then((books) => {
-                    setData(books);
-                    setError(""); // Limpa o erro em caso de sucesso
+                    setData(books || []); // Garantir que setData receba um array vazio caso não haja livros
                     setSuggestions([]);
+                    setError(""); // Limpa o erro em caso de sucesso
                 })
                 .catch(() => handleError("Erro ao buscar livros. Tente novamente."));
         }
     };
 
-    const handleInputClick = () => {
-        if (search.length > 1 && user) {
-            fetchSuggestions();
-        }
-    };
-
-    const goToLogin = () => {
-        navigate("/signin");
-    };
-
-    const goToRegistro = () => {
-        navigate("/signup");
-    };
+    // Funções de navegação
+    const goToLogin = () => navigate("/signin");
+    const goToRegistro = () => navigate("/signup");
 
     return (
         <>
@@ -144,17 +135,11 @@ const Main = () => {
                         <h2>Buscador de Livros</h2>
                         {!user ? (
                             <>
-                                <button onClick={goToLogin} className="button login">
-                                    Login
-                                </button>
-                                <button onClick={goToRegistro} className="button registro">
-                                    Registre-se
-                                </button>
+                                <button onClick={goToLogin} className="button login">Login</button>
+                                <button onClick={goToRegistro} className="button registro">Registre-se</button>
                             </>
                         ) : (
-                            <button onClick={() => signout()} className="button logout">
-                                Sair
-                            </button>
+                            <button onClick={() => signout()} className="button logout">Sair</button>
                         )}
                     </div>
                     <span className={`connected-label ${user ? 'connected' : 'disconnected'}`}>
@@ -168,31 +153,17 @@ const Main = () => {
                             ref={inputRef}
                             onChange={(e) => setSearch(e.target.value)}
                             onKeyDown={searchBook}
-                            onClick={handleInputClick}
                         />
                         <button className="search" onClick={() => searchBook({ key: "Enter" })}>
                             <FiSearch size={25} color="#000" />
                         </button>
                     </div>
-                    {error && (
-                        <div className="error-message">
-                            <h4>Erro:</h4>
-                            <p>{error}</p>
-                        </div>
-                    )}
+                    {error && <div className="error-message"><h4>Erro:</h4><p>{error}</p></div>}
                     {suggestions.length > 0 && (
                         <ul className="suggestions" ref={suggestionsRef}>
                             {suggestions.map((book, index) => (
-                                <li
-                                    key={index}
-                                    onClick={() => setSearch(book.title)}
-                                >
-                                    {book.thumbnail && (
-                                        <img
-                                            src={book.thumbnail}
-                                            alt="Book thumbnail"
-                                        />
-                                    )}
+                                <li key={index} onClick={() => setSearch(book.title)}>
+                                    {book.thumbnail && <img src={book.thumbnail} alt="Book thumbnail" />}
                                     <span>{book.title}</span>
                                 </li>
                             ))}

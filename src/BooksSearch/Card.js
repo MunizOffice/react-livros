@@ -1,36 +1,34 @@
-import react from "react";
 import React, { useState } from "react";
 import Modal from "./Modal";
 const Card = ({ book }) => {
-
     const [show, setShow] = useState(false);
     const [bookItem, setItem] = useState();
-    console.log(book)
+
     return (
         <>
-            {
+            {Array.isArray(book) && book.length > 0 ? (
                 book.map((item) => {
                     let thumbnail = item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.smallThumbnail;
                     let amount = item.saleInfo.listPrice && item.saleInfo.listPrice.amount;
-                    if (thumbnail != undefined) {
+                    if (thumbnail !== undefined) {
                         return (
-                            <>
-                                <div className="card" onClick={() => { setShow(true); setItem(item) }}>
-                                    <img src={thumbnail} alt="" />
-                                    <div className="bottom">
-                                        <h3 className="title">{item.volumeInfo.title}</h3>
-                                        <p className="amount">&#8377;{amount}</p>
-                                    </div>
+                            <div key={item.id} className="card" onClick={() => { setShow(true); setItem(item) }}>
+                                <img src={thumbnail} alt="" />
+                                <div className="bottom">
+                                    <h3 className="title">{item.volumeInfo.title}</h3>
+                                    <p className="amount">&#8377;{amount}</p>
                                 </div>
-                                <Modal show={show} item={bookItem} onClose={() => setShow(false)} />
-                            </>
-                        )
+                            </div>
+                        );
                     }
-
+                    return null; // Adicionar retorno vazio caso o thumbnail seja undefined
                 })
-            }
-
+            ) : (
+                <div className="no-results"><h4>Erro: Nenhum livro encontrado.<br />Tente outra pesquisa.</h4></div> // Exibe uma mensagem caso não haja resultados
+            )}
+            <Modal show={show} item={bookItem} onClose={() => setShow(false)} />
         </>
-    )
-}
+    );
+};
+
 export default Card;

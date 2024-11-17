@@ -8,7 +8,7 @@
 
 :root {
     --primary-color: rgb(27, 47, 48);
-    --secondary-color: #D4B996FF;
+    --secondary-color: rgb(226, 195, 154);
 }
 
 body {
@@ -176,6 +176,30 @@ html {
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.no-results {
+    color: rgb(255, 63, 63);
+    background-color: rgba(255, 63, 63, 0.1);
+    padding: 20px;
+    border: 1px solid rgb(255, 63, 63);
+    border-radius: 5px;
+    width: 70%;
+    max-width: 90%;
+    height: auto;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    word-wrap: break-word;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+    margin: 20px auto;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .suggestions {
     position: absolute;
     left: 50%;
@@ -282,11 +306,12 @@ html {
 .overlay-inner {
     background: white;
     width: 700px;
-    height: 550px;
+    height: auto;
+    max-height: 80vh;
     padding: 1.5rem;
     position: relative;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow-y: auto;
     font-size: 1.3rem;
 }
 
@@ -298,12 +323,42 @@ html {
     outline: none;
     background-color: transparent;
     font-size: 17px;
+    cursor: pointer;
+    transition: color 0.3s, transform 0.2s;
 }
 
-.overlay-inner .inner-box {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
+.overlay-inner .close:hover {
+    color: rgb(252, 27, 27);
+    transform: scale(1.2);
+}
+
+.overlay-inner .close:active {
+    color: rgb(255, 0, 0);
+    transform: scale(1);
+}
+
+/* Estilos para o botão "Mais informações" */
+.overlay-inner .inner-box button {
+    width: 200px;
+    padding: 0.3rem 0.5rem;
+    border-radius: 5px;
+    background-color: #000000;
+    color: white;
+    font-weight: bold;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.overlay-inner .inner-box button:hover {
+    background-color: #555555;
+    transform: scale(1.05);
+}
+
+.overlay-inner .inner-box button:active {
+    background-color: #333333;
+    transform: scale(1);
 }
 
 .overlay-inner .inner-box img {
@@ -318,14 +373,14 @@ html {
 }
 
 .overlay-inner .inner-box h4 {
-    color: blue;
+    color: rgb(0, 0, 0);
 }
 
 .overlay-inner .inner-box button {
     width: 200px;
     padding: 0.3rem 0.5rem;
     border-radius: 5px;
-    background-color: #24a0ed;
+    background-color: #000000;
     color: white;
     font-weight: bold;
     border: none;
@@ -340,30 +395,44 @@ html {
 
 @media (max-width: 768px) {
 
+    .header {
+        margin-bottom: 70px;
+    }
+
     .login,
     .logout {
         margin-left: auto;
-        /* Remove o deslocamento lateral */
         margin-right: auto;
-        /* Centraliza os botões */
         display: flex;
         justify-content: center;
-        /* Alinha no centro */
     }
 
     .button {
-        max-width: 100%;
-        /* Garante que o botão não ultrapasse a largura do container */
+        max-width: 30%;
         padding: 12px 16px;
-        /* Ajusta o tamanho */
         font-size: 14px;
-        /* Reduz o tamanho do texto */
+    }
+
+    .container {
+        width: 75%;
+    }
+
+    .no-results {
+        font-size: 16px;
+        /* Reduz o tamanho do texto para melhor adaptação */
+        padding: 15px;
+        /* Reduz o espaçamento interno */
+    }
+
+    .overlay-inner {
+        width: 90%;
+        max-height: 70vh;
+        font-size: 1rem;
     }
 }
 
 @media (max-width: 480px) {
     .row2 h2 {
         font-size: 1.8rem;
-        /* Reduz o tamanho do título */
     }
 }
