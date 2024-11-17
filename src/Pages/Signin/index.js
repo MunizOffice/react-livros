@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import * as C from "./styles";
@@ -8,12 +8,21 @@ import useAuth from "../../Hooks/useAuth";
 const Signin = () => {
   const { signin } = useAuth();
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [error, setError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [senhaError, setSenhaError] = useState("");
+
+  useEffect(() => {
+    // Adiciona classe ao body
+    document.body.classList.add("login-background");
+
+    return () => {
+      // Remove a classe ao desmontar o componente
+      document.body.classList.remove("login-background");
+    };
+  }, []);
 
   const handleLogin = () => {
     // Resetar mensagens de erro
@@ -67,6 +76,7 @@ const Signin = () => {
       <C.Container>
         <C.Label>FAÇA SEU LOGIN</C.Label>
         <C.Content>
+          <C.Names>E-mail:</C.Names>
           <Input
             type="email"
             placeholder="Digite o seu E-mail"
@@ -75,6 +85,7 @@ const Signin = () => {
           />
           {emailError && <C.labelError>{emailError}</C.labelError>}
 
+          <C.Names>Senha:</C.Names>
           <Input
             type="password"
             placeholder="Digite a sua Senha"

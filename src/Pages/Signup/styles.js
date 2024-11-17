@@ -34,7 +34,7 @@ export const Container = styled.div`
 
 export const Content = styled.div`
   width: 100%;
-  max-width: 350px;
+  max-width: 500px;
   padding: 20px;
   background-color: white;
   box-shadow: 0 1px 2px #0003;
@@ -44,12 +44,24 @@ export const Content = styled.div`
   align-items: center;
   justify-content: center;
   gap: 15px;
+  min-height: 400px; 
 `;
+
 
 export const Label = styled.label`
   font-weight: 600;
   font-size: 36px;
   color: #676767;
+`;
+
+
+export const Names = styled.label`
+  font-weight: 200;
+  font-size: 22px;
+  color: #676767;
+  text-align: left; 
+  width: 100%; 
+  display: block; 
 `;
 
 export const LabelSignin = styled.label`

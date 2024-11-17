@@ -15,6 +15,10 @@ body {
     background-color: var(--primary-color);
 }
 
+body.login-background {
+    background-color: #d6d6d6;
+}
+
 html {
     font-size: 90%;
 }
@@ -50,6 +54,7 @@ html {
 
 .row2 h2 {
     font-size: 3rem;
+    font-weight: bold;
     margin: 20px 0 15px;
 }
 
@@ -79,10 +84,39 @@ html {
     font-size: 16px;
     font-weight: 600;
     outline: none;
+
+    &:hover {
+        background-color: #0056b3;
+    }
+
+    &:active {
+        background-color: #003f7f;
+    }
 }
 
 .login {
     margin-left: 60%;
+}
+
+.logout {
+    margin-left: 65%;
+}
+
+.connected-label {
+    display: block;
+    margin: 10px;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+/* Cor para quando o usuário está logado */
+.connected-label.connected {
+    color: rgb(0, 255, 0);
+}
+
+/* Cor para quando o usuário não está logado */
+.connected-label.disconnected {
+    color: rgb(252, 27, 27);
 }
 
 .search {
@@ -258,7 +292,7 @@ html {
 }
 
 .overlay-inner .inner-box button {
-    width: 100px;
+    width: 200px;
     padding: 0.3rem 0.5rem;
     border-radius: 5px;
     background-color: #24a0ed;

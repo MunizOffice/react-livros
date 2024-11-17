@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import * as C from "./styles";
@@ -14,8 +14,17 @@ const Signup = () => {
   const [emailConfError, setEmailConfError] = useState("");
   const [senhaError, setSenhaError] = useState("");
   const navigate = useNavigate();
-
   const { signup } = useAuth();
+
+  useEffect(() => {
+    // Adiciona classe ao body
+    document.body.classList.add("login-background");
+
+    return () => {
+      // Remove a classe ao desmontar o componente
+      document.body.classList.remove("login-background");
+    };
+  }, []);
 
   const handleSignup = () => {
     // Resetando mensagens de erro
@@ -61,7 +70,6 @@ const Signup = () => {
       return;
     }
 
-    alert("Usuário cadastrado com sucesso!");
     navigate("/");
   };
 
@@ -77,6 +85,7 @@ const Signup = () => {
       <C.Container>
         <C.Label>FAÇA SEU CADASTRO</C.Label>
         <C.Content>
+          <C.Names>E-mail:</C.Names>
           <Input
             type="email"
             placeholder="Digite seu E-mail"
@@ -85,6 +94,7 @@ const Signup = () => {
           />
           {emailError && <C.labelError>{emailError}</C.labelError>}
 
+          <C.Names>Confirmação:</C.Names>
           <Input
             type="email"
             placeholder="Confirme seu E-mail"
@@ -93,6 +103,7 @@ const Signup = () => {
           />
           {emailConfError && <C.labelError>{emailConfError}</C.labelError>}
 
+          <C.Names>Senha:</C.Names>
           <Input
             type="password"
             placeholder="Digite sua Senha"
@@ -108,7 +119,7 @@ const Signup = () => {
           <C.LabelSignin>
             Já tem uma conta?
             <C.Strong>
-              <Link to="/">&nbsp;Entre</Link>
+              <Link to="/signin">&nbsp;Entre</Link>
             </C.Strong>
           </C.LabelSignin>
         </C.Content>

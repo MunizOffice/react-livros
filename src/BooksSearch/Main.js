@@ -15,6 +15,17 @@ const Main = () => {
     const inputRef = useRef(null);
     const { user, signout } = useAuth(); // Pega o estado de autenticação do usuário e função para logout
 
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        // Verificar se o usuário está logado
+        if (user) {
+            setIsLoggedIn(true); // Usuário logado
+        } else {
+            setIsLoggedIn(false); // Usuário não logado
+        }
+    }, [user]);
+
     const fetchBooks = (query, maxResults = 10) => {
         return axios
             .get(
@@ -81,7 +92,7 @@ const Main = () => {
     }, []);
 
     const searchBook = (evt) => {
-        if (evt.key === "Enter") {
+        if (evt.key === "Enter" || evt.key === undefined) { // Permite cliques no botão
             if (!user) {
                 setError("Você precisa estar logado para buscar livros."); // Bloqueia busca para não logados
                 return;
@@ -91,6 +102,7 @@ const Main = () => {
                 setError("Por favor, preencha o campo de busca.");
                 return;
             }
+
             fetchBooks(search, 40)
                 .then((books) => {
                     setData(books);
@@ -132,10 +144,13 @@ const Main = () => {
                             </>
                         ) : (
                             <button onClick={() => signout()} className="button logout">
-                                Logout
+                                Sair
                             </button>
                         )}
                     </div>
+                    <span className={`connected-label ${user ? 'connected' : 'disconnected'}`}>
+                        {user ? "Conectado - Busca liberada" : "Desconectado - Faça Login"}
+                    </span>
                     <div className="search">
                         <input
                             type="text"
@@ -147,7 +162,7 @@ const Main = () => {
                             onClick={handleInputClick}
                             disabled={!user} // Desabilita o campo de busca para não logados
                         />
-                        <button className="search">
+                        <button className="search" onClick={() => searchBook({ key: "Enter" })}>
                             <FiSearch size={25} color="#000" />
                         </button>
                     </div>
