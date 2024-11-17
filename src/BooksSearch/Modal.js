@@ -20,7 +20,7 @@ const Modal = ({ show, item, onClose }) => {
                             <h1>{item.volumeInfo.title}</h1>
                             <h3>{item.volumeInfo.authors}</h3>
                             <h4>{item.volumeInfo.publisher}<span>{item.volumeInfo.publishedDate}</span></h4><br />
-                            <a href={item.volumeInfo.previewLink}><button>Mais informações</button></a>
+                            <a href={item.volumeInfo.previewLink}><button>Ir para a página</button></a>
                         </div>
                     </div>
                     <h4 className="description">{item.volumeInfo.description}</h4>
