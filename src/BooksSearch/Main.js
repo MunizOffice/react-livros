@@ -50,7 +50,7 @@ const Main = () => {
         }
     }, [user, fetchBooks, handleError]); // 'fetchBooks' como dependência
 
-    // Use useCallback diretamente dentro de useEffect para evitar warnings
+    // Usa useCallback diretamente dentro de useEffect para evitar warnings
     useEffect(() => {
         const fetchSuggestions = debounce(async (query) => {
             if (!user) {
