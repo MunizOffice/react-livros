@@ -24,8 +24,7 @@ const Signin = () => {
     };
   }, []);
 
-  const handleLogin = () => {
-    // Resetar mensagens de erro
+  const handleLogin = async () => {
     setError("");
     setEmailError("");
     setSenhaError("");
@@ -45,7 +44,7 @@ const Signin = () => {
       hasError = true;
     }
 
-    // Verificar se campos estão preenchidos
+    // Verificar campos preenchidos
     if (!email || !senha) {
       setError("Preencha todos os campos");
       hasError = true;
@@ -53,9 +52,8 @@ const Signin = () => {
 
     if (hasError) return;
 
-    // Tentar fazer o login se não houver erros
-    const res = signin(email, senha);
-
+    // Tentar fazer login
+    const res = await signin(email, senha);
     if (res) {
       setError(res);
       return;

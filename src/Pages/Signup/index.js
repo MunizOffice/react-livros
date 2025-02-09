@@ -26,8 +26,7 @@ const Signup = () => {
     };
   }, []);
 
-  const handleSignup = () => {
-    // Resetando mensagens de erro
+  const handleSignup = async () => {
     setError("");
     setEmailError("");
     setEmailConfError("");
@@ -62,9 +61,8 @@ const Signup = () => {
 
     if (hasError) return;
 
-    // Fazer o cadastro sem erros
-    const res = signup(email, senha);
-
+    // Tentar fazer cadastro
+    const res = await signup(email, senha);
     if (res) {
       setError(res);
       return;

@@ -7,9 +7,8 @@ import Main from "../BooksSearch/Main";
 
 // Verifica a autenticação e redireciona se necessário.
 const PrivateRoute = ({ element: Component }) => {
-  const { signed } = useAuth();
-
-  return signed ? <Component /> : <Navigate to="/" />;
+  const { user } = useAuth();
+  return user ? <Component /> : <Navigate to="/signin" />;
 };
 
 const RoutesApp = () => {

@@ -23,6 +23,8 @@ export const BackButton = styled.button`
   }
 `;
 
+
+
 export const Container = styled.div`
   height: 100vh;
   display: flex;
@@ -50,13 +52,13 @@ export const Content = styled.div`
 export const Label = styled.label`
   font-weight: 600;
   font-size: 36px;
-  color: #676767;
+  color: #353535;
 `;
 
 export const Names = styled.label`
   font-weight: 200;
   font-size: 22px;
-  color: #676767;
+  color: #353535;
   text-align: left; 
   width: 100%; 
   display: block; 
@@ -64,7 +66,7 @@ export const Names = styled.label`
 
 export const LabelSignup = styled.label`
   font-size: 16px;
-  color: #676767;
+  color: #353535;
 `;
 
 export const labelError = styled.label`
@@ -76,7 +78,7 @@ export const Strong = styled.strong`
   cursor: pointer;
 
   a {
-    color: #676767;
+    color: #353535;
     text-decoration: none;
   }
 `;
