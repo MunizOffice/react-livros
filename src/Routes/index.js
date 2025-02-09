@@ -4,6 +4,7 @@ import useAuth from "../Hooks/useAuth";
 import Signin from "../Pages/Signin";
 import Signup from "../Pages/Signup";
 import Main from "../BooksSearch/Main";
+import SavedBooks from "../Pages/SavedBooks"; // Importe a nova página
 
 // Verifica a autenticação e redireciona se necessário.
 const PrivateRoute = ({ element: Component }) => {
@@ -20,6 +21,7 @@ const RoutesApp = () => {
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/saved-books" element={<PrivateRoute element={SavedBooks} />} />
       </Routes>
     </Fragment>
   );

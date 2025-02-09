@@ -2,31 +2,29 @@ import React from "react";
 import { IoMdCloseCircle } from "react-icons/io";
 
 const Modal = ({ show, item, onClose }) => {
-    if (!show) {
-        return null;
+    if (!show || !item) {
+        return null; // Não renderiza o modal se `item` for undefined
     }
 
     // Obtém a miniatura do livro, se disponível.
-    let thumbnail = item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.smallThumbnail;
+    let thumbnail = item.volumeInfo.imageLinks?.smallThumbnail;
 
     return (
-        <>
-            <div className="overlay">
-                <div className="overlay-inner">
-                    <button className="close" onClick={onClose}><IoMdCloseCircle size={25} /></button>
-                    <div className="inner-box">
-                        <img src={thumbnail} alt="" />
-                        <div className="info">
-                            <h1>{item.volumeInfo.title}</h1>
-                            <h3>{item.volumeInfo.authors}</h3>
-                            <h4>{item.volumeInfo.publisher}<span>{item.volumeInfo.publishedDate}</span></h4><br />
-                            <a href={item.volumeInfo.previewLink}><button>Ir para a página</button></a>
-                        </div>
-                    </div>
-                    <h4 className="description">{item.volumeInfo.description}</h4>
-                </div>
-            </div>
-        </>
-    )
-}
+        <div>
+            <button onClick={onClose}>
+                <IoMdCloseCircle />
+            </button>
+            <h2>{item.volumeInfo?.title}</h2>
+            <p>{item.volumeInfo?.authors?.join(", ")}</p>
+            <p>
+                {item.volumeInfo?.publisher} - {item.volumeInfo?.publishedDate}
+            </p>
+            <a href={item.volumeInfo?.infoLink} target="_blank" rel="noopener noreferrer">
+                Ir para a página
+            </a>
+            <p>{item.volumeInfo?.description}</p>
+        </div>
+    );
+};
+
 export default Modal;

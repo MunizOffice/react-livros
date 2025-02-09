@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   // Função para realizar login
   const signin = async (email, password) => {
     try {
-      const response = await axios.post("http://localhost:5001/auth/login", { email, password });
+      const response = await axios.post("http://localhost:5000/auth/login", { email, password });
       const { token } = response.data;
       setToken(token);
       setUser(email); // Armazena o email do usuário logado
@@ -22,12 +22,28 @@ export const AuthProvider = ({ children }) => {
 
   // Função para realizar cadastro
   const signup = async (email, password) => {
-    try {
-      await axios.post("http://localhost:5001/auth/signup", { email, password });
-      return null; // Sem erro
-    } catch (error) {
-      return error.response?.data?.error || "Erro ao criar conta";
+    const usersStorage = JSON.parse(localStorage.getItem("users_bd"));
+    const hasUser = usersStorage?.filter((user) => user.email === email);
+
+    if (hasUser?.length) {
+      return "Já tem uma conta com esse E-mail";
     }
+
+    let newUser;
+    if (usersStorage) {
+      newUser = [...usersStorage, { email, password }];
+    } else {
+      newUser = [{ email, password }];
+    }
+
+    localStorage.setItem("users_bd", JSON.stringify(newUser));
+
+    // Realiza o login automaticamente
+    const token = Math.random().toString(36).substring(2);
+    localStorage.setItem("user_token", JSON.stringify({ email, token }));
+    setUser({ email, password });
+
+    return null; // Sem erro
   };
 
   // Função para fazer logout

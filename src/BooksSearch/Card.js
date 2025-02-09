@@ -1,52 +1,55 @@
 import React, { useState } from "react";
 import Modal from "./Modal";
-import useAuth from "../Hooks/useAuth"; // Certifique-se de importar corretamente
+import useAuth from "../Hooks/useAuth";
 
 const Card = ({ book }) => {
     const [show, setShow] = useState(false);
-    const [bookItem, setItem] = useState();
-    const { user } = useAuth(); // Obtemos o estado do usuário autenticado
+    const [bookItem, setBookItem] = useState(null); // Inicialize como null
+    const { user } = useAuth();
 
     if (!user) {
-        return (
-            <div className="no-results">
-                <h4>Erro: Nenhum livro encontrado.<br />Tente outra pesquisa.</h4>
-            </div>
-        );
+        return <p>Erro: Nenhum livro encontrado. Tente outra pesquisa.</p>;
     }
 
     return (
         <>
             {Array.isArray(book) && book.length > 0 ? (
                 book.map((item) => {
-                    let thumbnail = item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.smallThumbnail;
-                    let amount = item.saleInfo.listPrice && item.saleInfo.listPrice.amount;
+                    let thumbnail = item.volumeInfo.imageLinks?.smallThumbnail;
+                    let amount = item.saleInfo.listPrice?.amount;
+
                     if (thumbnail !== undefined) {
                         return (
-                            <div
-                                key={item.id}
-                                className="card"
-                                onClick={() => {
-                                    setShow(true);
-                                    setItem(item);
-                                }}
-                            >
-                                <img src={thumbnail} alt="" />
-                                <div className="bottom">
-                                    <h3 className="title">{item.volumeInfo.title}</h3>
-                                    <p className="amount">&#8377;{amount}</p>
-                                </div>
+                            <div key={item.id}>
+                                <button
+                                    onClick={() => {
+                                        setBookItem(item); // Define o livro selecionado
+                                        setShow(true); // Abre o modal
+                                    }}
+                                >
+                                    Salvar
+                                </button>
+                                <img src={thumbnail} alt={item.volumeInfo.title} />
+                                <h3>{item.volumeInfo.title}</h3>
+                                <p>₹{amount}</p>
                             </div>
                         );
                     }
                     return null; // Adicionar retorno vazio caso o thumbnail seja undefined
                 })
             ) : (
-                <div className="no-results">
-                    <h4>Erro: Nenhum livro encontrado.<br />Tente outra pesquisa.</h4>
-                </div>
+                <p>Erro: Nenhum livro encontrado. Tente outra pesquisa.</p>
             )}
-            <Modal show={show} item={bookItem} onClose={() => setShow(false)} />
+            {show && bookItem && (
+                <Modal
+                    show={show}
+                    item={bookItem}
+                    onClose={() => {
+                        setShow(false);
+                        setBookItem(null); // Limpa o livro selecionado ao fechar o modal
+                    }}
+                />
+            )}
         </>
     );
 };

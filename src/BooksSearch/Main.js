@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { FiSearch } from "react-icons/fi";
 import axios from "axios";
 import Card from "./Card";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 import debounce from "lodash.debounce";
 
@@ -133,6 +133,7 @@ const Main = () => {
                 <div className="row2">
                     <div className="logo">
                         <h2>Buscador de Livros</h2>
+                        <Link to="/saved-books">Ver Meus Livros Salvos</Link>
                         {!user ? (
                             <>
                                 <button onClick={goToLogin} className="button login">Login</button>
