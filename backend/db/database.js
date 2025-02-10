@@ -1,5 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
+const bcrypt = require("bcryptjs");
 
 // Conexão com o banco de dados
 const dbPath = path.resolve(__dirname, "../../database.sqlite");
@@ -29,5 +30,37 @@ const db = new sqlite3.Database(dbPath, (err) => {
     `);
   }
 });
+
+// Função para criar usuário pré-cadastrado
+const createPredefinedUser = async () => {
+  const email = "usuario1@example.com";
+  const password = "SenhaSegura123"; // Senha em texto plano
+  const hashedPassword = await bcrypt.hash(password, 10); // Criptografa a senha
+
+  db.get("SELECT * FROM users WHERE email = ?", [email], (err, user) => {
+    if (err) {
+      console.error("Erro ao verificar usuário pré-cadastrado:", err.message);
+      return;
+    }
+    if (!user) {
+      db.run(
+        "INSERT INTO users (email, password) VALUES (?, ?)",
+        [email, hashedPassword],
+        (err) => {
+          if (err) {
+            console.error("Erro ao criar usuário pré-cadastrado:", err.message);
+          } else {
+            console.log("Usuário pré-cadastrado criado com sucesso!");
+          }
+        }
+      );
+    } else {
+      console.log("Usuário pré-cadastrado já existe.");
+    }
+  });
+};
+
+// Chama a função para criar o usuário pré-cadastrado
+createPredefinedUser();
 
 module.exports = db;

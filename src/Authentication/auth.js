@@ -25,9 +25,11 @@ export const AuthProvider = ({ children }) => {
   const signup = async (email, password) => {
     try {
       const response = await axios.post("http://localhost:5000/auth/signup", { email, password });
-      if (response.status === 201) {
-        return null; // Cadastro bem-sucedido
-      }
+      const { token } = response.data;
+      setToken(token); // Armazena o token no estado
+      localStorage.setItem("token", token); // Salva o token no localStorage
+      setUser(email); // Define o estado como autenticado
+      return null; // Sem erro
     } catch (error) {
       return error.response?.data?.error || "Erro ao criar conta";
     }

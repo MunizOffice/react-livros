@@ -60,4 +60,15 @@ router.post(
     }
 );
 
+router.post("/search", (req, res) => {
+    const { query } = req.body;
+
+    if (!query || typeof query !== "string" || query.trim() === "") {
+        return res.status(400).json({ error: "Parâmetro de busca inválido" });
+    }
+
+    // Lógica para buscar livros no Google Books
+    res.json({ message: "Busca realizada com sucesso!" });
+});
+
 module.exports = router;
