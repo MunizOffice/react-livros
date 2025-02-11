@@ -17,7 +17,7 @@ const Card = ({ book }) => {
                 description: volumeInfo.description,
                 thumbnail: volumeInfo.imageLinks?.smallThumbnail,
             };
-            await fetch("http://localhost:5000/books", {
+            await fetch("https://localhost:5443/books", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   // Função para realizar login
   const signin = async (email, password) => {
     try {
-      const response = await axios.post("http://localhost:5000/auth/login", { email, password });
+      const response = await axios.post("https://localhost:5443/auth/login", { email, password });
       const { token } = response.data;
       setToken(token);
       localStorage.setItem("token", token); // Salva o token no localStorage
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
   // Função para realizar cadastro
   const signup = async (email, password) => {
     try {
-      const response = await axios.post("http://localhost:5000/auth/signup", { email, password });
+      const response = await axios.post("https://localhost:5443/auth/signup", { email, password });
       const { token } = response.data;
       setToken(token); // Armazena o token no estado
       localStorage.setItem("token", token); // Salva o token no localStorage
