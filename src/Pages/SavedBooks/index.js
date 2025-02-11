@@ -29,6 +29,20 @@ const SavedBooks = () => {
         fetchSavedBooks();
     }, [token]);
 
+    // Função para excluir um livro
+    const deleteBook = async (id) => {
+        try {
+            await axios.delete(`https://localhost:5443/books/${id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setBooks((prevBooks) => prevBooks.filter((book) => book.id !== id)); // Remove o livro da lista
+            alert("Livro excluído com sucesso!");
+        } catch (error) {
+            console.error(error);
+            alert("Erro ao excluir o livro.");
+        }
+    };
+
     return (
         <div>
             <h1>Meus Livros Salvos</h1>
@@ -38,9 +52,10 @@ const SavedBooks = () => {
                     {books.map((book) => (
                         <li key={book.id}>
                             <img src={book.thumbnail} alt={book.title} />
-                            <h3>{book.title}</h3>
+                            <h2>{book.title}</h2>
                             <p>{book.author}</p>
                             <p>{book.description}</p>
+                            <button onClick={() => deleteBook(book.id)}>Excluir</button>
                         </li>
                     ))}
                 </ul>
