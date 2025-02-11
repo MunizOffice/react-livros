@@ -36,7 +36,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Função para fazer logout
-  const signout = () => {
+  const signout = async () => {
+    try {
+      await axios.post("https://localhost:5443/auth/logout", {}, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error.message);
+    }
     setUser(null);
     setToken(null);
     localStorage.removeItem("token"); // Remove o token do localStorage

@@ -12,20 +12,27 @@ const db = new sqlite3.Database(dbPath, (err) => {
     // Criar tabelas, se não existirem
     db.run(`
       CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL
       )
     `);
     db.run(`
       CREATE TABLE IF NOT EXISTS books (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        userId INTEGER NOT NULL,
-        title TEXT NOT NULL,
-        author TEXT NOT NULL,
-        description TEXT,
-        thumbnail TEXT,
-        FOREIGN KEY(userId) REFERENCES users(id)
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    author TEXT NOT NULL,
+    description TEXT,
+    thumbnail TEXT,
+    FOREIGN KEY(userId) REFERENCES users(id)
+      )
+    `);
+    db.run(`
+      CREATE TABLE IF NOT EXISTS revoked_tokens (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    token TEXT NOT NULL UNIQUE,
+    revokedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
   }
@@ -36,7 +43,6 @@ const createPredefinedUser = async () => {
   const email = "usuario1@example.com";
   const password = "SenhaSegura123"; // Senha em texto plano
   const hashedPassword = await bcrypt.hash(password, 10); // Criptografa a senha
-
   db.get("SELECT * FROM users WHERE email = ?", [email], (err, user) => {
     if (err) {
       console.error("Erro ao verificar usuário pré-cadastrado:", err.message);

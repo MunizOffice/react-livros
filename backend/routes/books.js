@@ -28,7 +28,6 @@ router.get("/", authenticateToken, (req, res) => {
 });
 
 // Rota para salvar um livro no banco de dados
-// Rota para salvar um livro no banco de dados
 router.post(
     "/",
     authenticateToken,
