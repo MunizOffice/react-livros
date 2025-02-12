@@ -56,19 +56,25 @@ const Card = ({ book }) => {
                     let amount = item.saleInfo.listPrice?.amount;
                     if (thumbnail !== undefined) {
                         return (
-                            <div key={item.id} style={{ border: "1px solid #ccc", padding: "10px", margin: "10px", borderRadius: "8px" }}>
-                                <img src={thumbnail} alt={item.volumeInfo.title} style={{ width: "100px", height: "150px", objectFit: "cover" }} />
+                            <div className="card" key={item.id} style={{ border: "1px solid #ccc", padding: "10px", margin: "10px", borderRadius: "8px" }}>
+                                <img className="card img" src={thumbnail} alt={item.volumeInfo.title} style={{ width: "100px", height: "150px", objectFit: "cover" }} />
                                 <h3>{item.volumeInfo.title}</h3>
                                 <p>₹{amount}</p>
-                                <button onClick={() => saveBook(item)}>Salvar</button>
-                                <button onClick={() => { setBookItem(item); setShow(true); }}>Ver Detalhes</button>
+                                <button className="card-button card-button-save" onClick={() => saveBook(item)}>
+                                    Salvar
+                                </button>
+                                <button className="card-button card-button-details" onClick={() => { setBookItem(item); setShow(true); }}>
+                                    Ver Detalhes
+                                </button>
                             </div>
                         );
                     }
                     return null; // Adicionar retorno vazio caso o thumbnail seja undefined
                 })
             ) : (
-                <div>Erro: Nenhum livro encontrado. Tente outra pesquisa.</div>
+                <div className="error-card-container">
+                    <div className="error-card">Erro: Nenhum livro encontrado. Tente outra pesquisa.</div>
+                </div>
             )}
             {show && bookItem && (
                 <Modal show={show} item={bookItem} onClose={() => setShow(false)} />

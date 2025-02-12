@@ -5,6 +5,8 @@ import Card from "./Card";
 import { useNavigate, Link } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 import debounce from "lodash.debounce";
+import { GoStarFill } from "react-icons/go";
+import Header from "../Components/Header/header";
 
 const Main = () => {
     const [search, setSearch] = useState("");
@@ -126,23 +128,15 @@ const Main = () => {
     // Funções de navegação
     const goToLogin = () => navigate("/signin");
     const goToRegistro = () => navigate("/signup");
+    const goToSavedBooks = () => {
+        navigate("/saved-books");
+    };
 
     return (
         <>
             <div className="header">
                 <div className="row2">
-                    <div className="logo">
-                        <h2>Buscador de Livros</h2>
-                        <Link to="/saved-books">Ver Meus Livros Salvos</Link>
-                        {!user ? (
-                            <>
-                                <button onClick={goToLogin} className="button login">Login</button>
-                                <button onClick={goToRegistro} className="button registro">Registre-se</button>
-                            </>
-                        ) : (
-                            <button onClick={() => signout()} className="button logout">Sair</button>
-                        )}
-                    </div>
+                    <Header />
                     <span className={`connected-label ${user ? 'connected' : 'disconnected'}`}>
                         {user ? "Conectado" : "Desconectado"}
                     </span>

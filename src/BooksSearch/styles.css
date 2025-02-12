@@ -7,8 +7,8 @@
 }
 
 :root {
-    --primary-color: rgb(27, 47, 48);
-    --secondary-color: rgb(226, 195, 154);
+    --primary-color: rgb(49, 33, 15);
+    --secondary-color: rgb(139, 118, 89);
 }
 
 body {
@@ -25,8 +25,8 @@ html {
 
 .header {
     width: 100%;
-    height: 350px;
-    color: var(--secondary-color);
+    height: 400px;
+    color: rgb(224, 175, 106);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -48,7 +48,7 @@ html {
 .row2 {
     width: 100%;
     position: absolute;
-    top: 10px;
+    top: 0;
     text-align: center;
 }
 
@@ -72,25 +72,27 @@ html {
 }
 
 .button {
-    width: 100%;
     max-width: 130px;
-    padding: 16px 20px;
+    padding: 14px 18px;
+    /* Reduzido para melhor adaptação em telas pequenas */
     background-color: #046ee5;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 15px;
+    /* Ajustado para melhor legibilidade */
     font-weight: 600;
     outline: none;
+    transition: background-color 0.3s ease;
+}
 
-    &:hover {
-        background-color: #0056b3;
-    }
+.button:hover {
+    background-color: #0056b3;
+}
 
-    &:active {
-        background-color: #003f7f;
-    }
+.button:active {
+    background-color: #003f7f;
 }
 
 .login {
@@ -106,6 +108,11 @@ html {
     margin: 10px;
     font-size: 22px;
     font-weight: 600;
+}
+
+.connected-label::before {
+    content: "●";
+    margin-right: 5px;
 }
 
 /* Cor para quando o usuário está logado */
@@ -174,6 +181,43 @@ html {
     font-size: 16px;
     font-weight: bold;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.error-message::before {
+    content: "⚠";
+    font-size: 20px;
+}
+
+.error-card-container {
+    display: flex;
+    justify-content: center;
+}
+
+.error-card {
+    color: rgb(255, 63, 63);
+    background-color: rgba(255, 63, 63, 0.1);
+    padding: 10px;
+    border: 1px solid rgb(255, 63, 63);
+    border-radius: 5px;
+    margin: 10px auto;
+    width: 50%;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.error-card::before {
+    content: "⚠";
+    font-size: 20px;
 }
 
 .no-results {
@@ -257,7 +301,7 @@ html {
 }
 
 .card:hover {
-    transform: scale(0.9);
+    transform: scale(1.1);
     background-color: rgba(255, 255, 255, 0.8);
 }
 
@@ -267,26 +311,41 @@ html {
     border-radius: 1rem 1rem 0 0;
 }
 
-.card .bottom {
-    display: flex;
-    flex-direction: column;
-}
-
-.card .bottom .title {
+/* Estilo base para os botões */
+.card-button {
+    display: inline-block;
+    padding: 8px 16px;
+    min-width: 120px;
+    margin: 5px;
+    border: none;
+    border-radius: 4px;
     font-size: 14px;
-    margin-bottom: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.card .bottom .amount {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-    background-color: var(--primary-color);
-    color: var(--secondary-color);
-    font-size: 13px;
-    font-weight: bold;
-    padding: 0.2rem;
+/* Estilo específico para o botão "Salvar" */
+.card-button-save {
+    background-color: #c49755;
+    color: white;
+}
+
+.card-button-save:hover {
+    background-color: #705630;
+    transform: scale(1.05);
+}
+
+/* Estilo específico para o botão "Ver Detalhes" */
+.card-button-details {
+    background-color: #007bff;
+    color: white;
+}
+
+.card-button-details:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
 }
 
 .overlay {
@@ -311,6 +370,7 @@ html {
     padding: 1.5rem;
     position: relative;
     box-sizing: border-box;
+    border-radius: 10px;
     overflow-y: auto;
     font-size: 1.3rem;
 }
@@ -322,7 +382,7 @@ html {
     border: none;
     outline: none;
     background-color: transparent;
-    font-size: 17px;
+    font-size: 28px;
     cursor: pointer;
     transition: color 0.3s, transform 0.2s;
 }
@@ -415,6 +475,12 @@ html {
 
     .container {
         width: 75%;
+    }
+
+    .search input {
+        width: 60%;
+        /* Aumenta o espaço disponível */
+        font-size: 14px;
     }
 
     .no-results {

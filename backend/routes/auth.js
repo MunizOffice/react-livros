@@ -64,7 +64,7 @@ router.post(
                     return res.status(401).json({ error: "E-mail ou senha inválidos" });
                 }
                 // Gerar token JWT
-                const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+                const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "24h" });
                 logger.info(`Login bem-sucedido para o e-mail: ${email}`);
                 res.json({ token });
             });
@@ -118,7 +118,7 @@ router.post(
                                 return res.status(500).json({ error: "Erro ao criar conta" });
                             }
                             // Gerar token JWT
-                            const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+                            const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, { expiresIn: "24h" });
                             logger.info(`Usuário criado com sucesso: ${email}`);
                             res.status(201).json({ message: "Conta criada com sucesso!", token });
                         });
