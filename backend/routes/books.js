@@ -8,9 +8,13 @@ const router = express.Router();
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
-    if (!token) return res.status(401).json({ error: "Acesso negado" });
+    if (!token) {
+        return res.status(401).json({ errors: [{ msg: "Acesso negado" }] });
+    }
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) return res.status(403).json({ error: "Token inválido" });
+        if (err) {
+            return res.status(403).json({ errors: [{ msg: "Token inválido" }] });
+        }
         req.user = user;
         next();
     });
@@ -32,27 +36,22 @@ router.post(
     "/",
     authenticateToken,
     [
-        body("title").notEmpty().withMessage("Título é obrigatório"), // Título é obrigatório
-        // Autor não precisa de validação, pois será preenchido com um valor padrão
+        body("title").notEmpty().withMessage("Título é obrigatório"),
     ],
     (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
-
         const { title, author, description, thumbnail } = req.body;
         const userId = req.user.userId;
-
-        // Define "Autor Desconhecido" como valor padrão para o autor, se não for fornecido
         const finalAuthor = author || "Autor Desconhecido";
-
         db.run(
             "INSERT INTO books (userId, title, author, description, thumbnail) VALUES (?, ?, ?, ?, ?)",
             [userId, title, finalAuthor, description, thumbnail],
             function (err) {
                 if (err) {
-                    return res.status(500).json({ error: "Erro ao salvar o livro" });
+                    return res.status(500).json({ errors: [{ msg: "Erro ao salvar o livro" }] });
                 }
                 res.status(201).json({ message: "Livro salvo com sucesso!" });
             }

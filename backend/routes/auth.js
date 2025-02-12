@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const db = require("../db/database");
 const { body, validationResult } = require("express-validator");
 const router = express.Router();
+const logger = require("../utils/logger"); // Importa o logger
+
 
 // Middleware para verificar o token JWT
 const authenticateToken = (req, res, next) => {
@@ -40,6 +42,7 @@ router.post(
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
+            logger.warn("Tentativa de login com dados inválidos.");
             return res.status(400).json({ errors: errors.array() });
         }
         const { email, password } = req.body;
@@ -47,23 +50,26 @@ router.post(
             // Verificar se o usuário existe
             db.get("SELECT * FROM users WHERE email = ?", [email], async (err, user) => {
                 if (err) {
-                    console.error("Erro ao verificar o usuário:", err.message);
+                    logger.error(`Erro ao verificar o usuário: ${err.message}`);
                     return res.status(500).json({ error: "Erro interno do servidor" });
                 }
                 if (!user) {
+                    logger.warn(`Tentativa de login com e-mail inexistente: ${email}`);
                     return res.status(401).json({ error: "E-mail ou senha inválidos" });
                 }
                 // Comparar a senha
                 const isMatch = await bcrypt.compare(password, user.password);
                 if (!isMatch) {
+                    logger.warn(`Tentativa de login com senha incorreta para o e-mail: ${email}`);
                     return res.status(401).json({ error: "E-mail ou senha inválidos" });
                 }
                 // Gerar token JWT
                 const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+                logger.info(`Login bem-sucedido para o e-mail: ${email}`);
                 res.json({ token });
             });
         } catch (error) {
-            console.error("Erro durante o login:", error.message);
+            logger.error(`Erro durante o login: ${error.message}`);
             res.status(500).json({ error: "Erro interno do servidor" });
         }
     }
@@ -79,6 +85,7 @@ router.post(
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
+            logger.warn("Tentativa de cadastro com dados inválidos.");
             return res.status(400).json({ errors: errors.array() });
         }
         const { email, password } = req.body;
@@ -86,10 +93,11 @@ router.post(
             // Verificar se o usuário já existe
             db.get("SELECT * FROM users WHERE email = ?", [email], async (err, user) => {
                 if (err) {
-                    console.error("Erro ao verificar o usuário:", err.message);
+                    logger.error(`Erro ao verificar o usuário: ${err.message}`);
                     return res.status(500).json({ error: "Erro interno do servidor" });
                 }
                 if (user) {
+                    logger.warn(`Tentativa de cadastro com e-mail já existente: ${email}`);
                     return res.status(400).json({ error: "E-mail já cadastrado" });
                 }
                 // Criptografar a senha
@@ -98,25 +106,27 @@ router.post(
                 db.run(
                     "INSERT INTO users (email, password) VALUES (?, ?)",
                     [email, hashedPassword],
-                    (err) => {
+                    async (err) => {
                         if (err) {
-                            console.error("Erro ao criar usuário:", err.message);
+                            logger.error(`Erro ao criar usuário: ${err.message}`);
                             return res.status(500).json({ error: "Erro ao criar conta" });
                         }
-                        // Gerar token JWT
+                        // Buscar o usuário recém-criado
                         db.get("SELECT * FROM users WHERE email = ?", [email], (err, newUser) => {
                             if (err) {
-                                console.error("Erro ao buscar usuário recém-criado:", err.message);
+                                logger.error(`Erro ao buscar usuário recém-criado: ${err.message}`);
                                 return res.status(500).json({ error: "Erro ao criar conta" });
                             }
+                            // Gerar token JWT
                             const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+                            logger.info(`Usuário criado com sucesso: ${email}`);
                             res.status(201).json({ message: "Conta criada com sucesso!", token });
                         });
                     }
                 );
             });
         } catch (error) {
-            console.error("Erro durante o cadastro:", error.message);
+            logger.error(`Erro durante o cadastro: ${error.message}`);
             res.status(500).json({ error: "Erro interno do servidor" });
         }
     }

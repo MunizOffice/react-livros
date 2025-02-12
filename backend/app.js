@@ -1,15 +1,17 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const compression = require("compression"); // Importa o middleware
+const compression = require("compression");
 const dotenv = require("dotenv");
 const NodeCache = require("node-cache");
 const authRoutes = require("./routes/auth");
 const bookRoutes = require("./routes/books");
+const logger = require("./utils/logger"); // Importa o logger
 
 // Configuração do cache
 const cache = new NodeCache({ stdTTL: 300 }); // TTL de 5 minutos (300 segundos)
 dotenv.config();
+
 const app = express();
 
 // Middleware de compressão
@@ -36,7 +38,7 @@ app.use((req, res, next) => {
         const cacheKey = req.originalUrl || req.url;
         const cachedResponse = cache.get(cacheKey);
         if (cachedResponse) {
-            console.log(`Resposta retornada do cache para: ${cacheKey}`);
+            logger.info(`Resposta retornada do cache para: ${cacheKey}`);
             return res.json(cachedResponse);
         }
         // Se não houver cache, armazena a resposta após a execução da rota
@@ -54,12 +56,18 @@ app.clearCache = (route) => {
     const cacheKey = route;
     if (cache.has(cacheKey)) {
         cache.del(cacheKey);
-        console.log(`Cache limpo para a rota: ${cacheKey}`);
+        logger.info(`Cache limpo para a rota: ${cacheKey}`);
     }
 };
 
 // Rotas
 app.use("/auth", authRoutes);
 app.use("/books", bookRoutes);
+
+// Middleware para capturar erros globais
+app.use((err, req, res, next) => {
+    logger.error(`Erro global capturado: ${err.message}`);
+    res.status(500).json({ error: "Erro interno do servidor" });
+});
 
 module.exports = app;

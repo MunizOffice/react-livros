@@ -11,20 +11,17 @@ const Card = ({ book }) => {
     const saveBook = async (item) => {
         try {
             const { volumeInfo } = item;
-
             // Verifica se o livro tem título
             if (!volumeInfo.title) {
                 alert("Este livro não pode ser salvo porque falta o título.");
                 return;
             }
-
             const payload = {
                 title: volumeInfo.title, // Título é obrigatório
                 author: volumeInfo.authors?.join(", ") || "Autor Desconhecido", // Autor opcional, com valor padrão
                 description: volumeInfo.description,
                 thumbnail: volumeInfo.imageLinks?.smallThumbnail,
             };
-
             const response = await fetch("https://localhost:5443/books", {
                 method: "POST",
                 headers: {
@@ -33,12 +30,13 @@ const Card = ({ book }) => {
                 },
                 body: JSON.stringify(payload),
             });
-
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.errors.map((err) => err.msg).join(", "));
+                const errorMessage = errorData.errors
+                    ? errorData.errors.map((err) => err.msg).join(", ")
+                    : "Erro desconhecido ao salvar o livro.";
+                throw new Error(errorMessage);
             }
-
             alert("Livro salvo com sucesso!");
         } catch (error) {
             console.error(error);
