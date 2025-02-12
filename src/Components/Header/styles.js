@@ -7,18 +7,32 @@ export const HeaderContainer = styled.div`
     justify-content: space-between;
     height: 80px;
     width: 100%;
-    background-color: rgb(31, 20, 8);
+    background-color: rgb(22, 14, 5);
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
     padding: 0 20px;
-    position: relative; 
+    position: fixed; // Fixa o cabeçalho no topo
+    top: 0; // Alinha ao topo da página
+    z-index: 1000; // Garante que o cabeçalho fique acima de outros elementos
+
+    @media (max-width: 768px) {
+        height: 100px;  
+    }
 `;
 
 // Título do cabeçalho
 export const HeaderTitle = styled.h2`
-    color: rgb(224, 175, 106) 
-    font-size: 1.5rem; 
+    color: rgb(224, 175, 106); // Adicione o ponto-e-vírgula aqui
+    font-size: 3rem; 
     margin: 0; 
     font-weight: bold; 
+
+    @media (max-width: 910px) {
+        font-size: 2.3rem; 
+    }
+
+    @media (max-width: 768px) {
+        font-size: 2rem;  
+    }
 `;
 
 // Botão genérico para reutilização
@@ -29,7 +43,8 @@ export const HeaderButton = styled.button`
     border-radius: 5px;
     margin: 10px;
     padding: 10px 15px; 
-    font-size: 1rem;
+    font-size: 1.2rem;
+    font-weight: bold; 
     cursor: pointer;
     transition: background-color 0.3s ease;
 
@@ -39,6 +54,16 @@ export const HeaderButton = styled.button`
 
     &:active {
         background-color: #003f7f; 
+    }
+
+    @media (max-width: 910px) {
+        padding: 8px 13px; 
+        font-size: 1.1rem; 
+    }
+
+    @media (max-width: 768px) {
+        padding: 5px 8px; 
+        font-size: 1rem; 
     }
 `;
 

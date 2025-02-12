@@ -6,8 +6,14 @@ const Modal = ({ show, item, onClose }) => {
         return null; // Não renderiza o modal se `item` for undefined
     }
 
-    // Obtém a miniatura do livro, se disponível
-    let thumbnail = item.volumeInfo.imageLinks?.smallThumbnail;
+    // Verificações seguras para evitar erros
+    const thumbnail = item.volumeInfo?.imageLinks?.smallThumbnail;
+    const title = item.volumeInfo?.title || "Título não disponível";
+    const authors = item.volumeInfo?.authors?.join(", ") || "Autor desconhecido";
+    const publisher = item.volumeInfo?.publisher || "Editora desconhecida";
+    const publishedDate = item.volumeInfo?.publishedDate || "Data de publicação desconhecida";
+    const description = item.volumeInfo?.description || "Descrição não disponível";
+    const previewLink = item.volumeInfo?.previewLink || "#";
 
     return (
         <div className="overlay">
@@ -17,13 +23,13 @@ const Modal = ({ show, item, onClose }) => {
                 </button>
                 <div className="inner-box">
                     {thumbnail && <img src={thumbnail} alt="book" />}
-                    <h3>{item.volumeInfo?.title}</h3>
-                    <h4>{item.volumeInfo?.authors?.join(", ")}</h4>
-                    <p>{item.volumeInfo?.publisher} - {item.volumeInfo?.publishedDate}</p>
-                    <a href={item.volumeInfo?.previewLink} target="_blank" rel="noopener noreferrer">
+                    <h3>{title}</h3>
+                    <h4>{authors}</h4>
+                    <p>{publisher} - {publishedDate}</p>
+                    <a href={previewLink} target="_blank" rel="noopener noreferrer">
                         Ir para a página
                     </a>
-                    <p className="description">{item.volumeInfo?.description}</p>
+                    <p className="description">{description}</p>
                 </div>
             </div>
         </div>

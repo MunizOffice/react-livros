@@ -15,7 +15,7 @@ export const BookContainer = styled.div`
 export const Title = styled.h1`
     color: rgb(224, 175, 106);
     font-size: 2.5rem;
-    margin-top: 90px;
+    margin-top: 170px;
 `;
 
 // Botão para voltar à página inicial

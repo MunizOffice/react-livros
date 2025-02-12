@@ -2,21 +2,18 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { FiSearch } from "react-icons/fi";
 import axios from "axios";
 import Card from "./Card";
-import { useNavigate, Link } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 import debounce from "lodash.debounce";
-import { GoStarFill } from "react-icons/go";
-import Header from "../Components/Header/header";
+
 
 const Main = () => {
     const [search, setSearch] = useState("");
     const [bookData, setData] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
     const [error, setError] = useState("");
-    const navigate = useNavigate();
     const suggestionsRef = useRef(null);
     const inputRef = useRef(null);
-    const { user, signout } = useAuth();
+    const { user } = useAuth();
 
     // Função para centralizar tratamento de erros
     const handleError = useCallback((message) => {
@@ -125,18 +122,10 @@ const Main = () => {
         }
     };
 
-    // Funções de navegação
-    const goToLogin = () => navigate("/signin");
-    const goToRegistro = () => navigate("/signup");
-    const goToSavedBooks = () => {
-        navigate("/saved-books");
-    };
-
     return (
         <>
             <div className="header">
                 <div className="row2">
-                    <Header />
                     <span className={`connected-label ${user ? 'connected' : 'disconnected'}`}>
                         {user ? "Conectado" : "Desconectado"}
                     </span>

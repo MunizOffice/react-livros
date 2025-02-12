@@ -15,14 +15,6 @@ body {
     background-color: var(--primary-color);
 }
 
-body.login-background {
-    background-color: #adadad;
-}
-
-html {
-    font-size: 90%;
-}
-
 .header {
     width: 100%;
     height: 400px;
@@ -58,54 +50,10 @@ html {
     margin: 20px 0 15px;
 }
 
-.row2 img {
-    margin-top: 30px;
-    width: 250px;
-}
-
-.logo {
-    margin-left: 5%;
-    margin-bottom: 40px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.button {
-    max-width: 130px;
-    padding: 14px 18px;
-    /* Reduzido para melhor adaptação em telas pequenas */
-    background-color: #046ee5;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 15px;
-    /* Ajustado para melhor legibilidade */
-    font-weight: 600;
-    outline: none;
-    transition: background-color 0.3s ease;
-}
-
-.button:hover {
-    background-color: #0056b3;
-}
-
-.button:active {
-    background-color: #003f7f;
-}
-
-.login {
-    margin-left: 60%;
-}
-
-.logout {
-    margin-left: 65%;
-}
-
 .connected-label {
     display: block;
     margin: 10px;
+    margin-top: 170px;
     font-size: 22px;
     font-weight: 600;
 }
@@ -115,12 +63,10 @@ html {
     margin-right: 5px;
 }
 
-/* Cor para quando o usuário está logado */
 .connected-label.connected {
     color: rgb(0, 255, 0);
 }
 
-/* Cor para quando o usuário não está logado */
 .connected-label.disconnected {
     color: rgb(252, 27, 27);
 }
@@ -164,11 +110,6 @@ html {
     box-sizing: border-box;
 }
 
-.error-label {
-    color: rgb(255, 63, 63);
-    font-size: 20px;
-}
-
 .error-message {
     color: rgb(255, 63, 63);
     background-color: rgba(255, 63, 63, 0.1);
@@ -190,58 +131,6 @@ html {
 .error-message::before {
     content: "⚠";
     font-size: 20px;
-}
-
-.error-card-container {
-    display: flex;
-    justify-content: center;
-}
-
-.error-card {
-    color: rgb(255, 63, 63);
-    background-color: rgba(255, 63, 63, 0.1);
-    padding: 10px;
-    border: 1px solid rgb(255, 63, 63);
-    border-radius: 5px;
-    margin: 10px auto;
-    width: 50%;
-    text-align: center;
-    font-size: 16px;
-    font-weight: bold;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-.error-card::before {
-    content: "⚠";
-    font-size: 20px;
-}
-
-.no-results {
-    color: rgb(255, 63, 63);
-    background-color: rgba(255, 63, 63, 0.1);
-    padding: 20px;
-    border: 1px solid rgb(255, 63, 63);
-    border-radius: 5px;
-    width: 70%;
-    max-width: 90%;
-    height: auto;
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    word-wrap: break-word;
-    box-sizing: border-box;
-    overflow-wrap: break-word;
-    margin: 20px auto;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 
 .suggestions {
@@ -311,7 +200,6 @@ html {
     border-radius: 1rem 1rem 0 0;
 }
 
-/* Estilo base para os botões */
 .card-button {
     display: inline-block;
     padding: 8px 16px;
@@ -326,7 +214,6 @@ html {
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/* Estilo específico para o botão "Salvar" */
 .card-button-save {
     background-color: #c49755;
     color: white;
@@ -337,7 +224,6 @@ html {
     transform: scale(1.05);
 }
 
-/* Estilo específico para o botão "Ver Detalhes" */
 .card-button-details {
     background-color: #007bff;
     color: white;
@@ -348,6 +234,7 @@ html {
     transform: scale(1.05);
 }
 
+/* Estilos para overlay */
 .overlay {
     position: fixed;
     top: 0;
@@ -397,7 +284,6 @@ html {
     transform: scale(1);
 }
 
-/* Estilos para o botão "Mais informações" */
 .overlay-inner .inner-box button {
     width: 200px;
     padding: 0.3rem 0.5rem;
@@ -436,17 +322,6 @@ html {
     color: rgb(0, 0, 0);
 }
 
-.overlay-inner .inner-box button {
-    width: 200px;
-    padding: 0.3rem 0.5rem;
-    border-radius: 5px;
-    background-color: #000000;
-    color: white;
-    font-weight: bold;
-    border: none;
-    outline: none;
-}
-
 .overlay-inner .description {
     margin-top: 2rem;
     text-align: justify;
@@ -454,40 +329,17 @@ html {
 }
 
 @media (max-width: 768px) {
-
     .header {
         margin-bottom: 70px;
     }
 
-    .login,
-    .logout {
-        margin-left: auto;
-        margin-right: auto;
-        display: flex;
-        justify-content: center;
-    }
-
-    .button {
-        max-width: 30%;
-        padding: 12px 16px;
+    .search input {
+        width: 60%;
         font-size: 14px;
     }
 
     .container {
         width: 75%;
-    }
-
-    .search input {
-        width: 60%;
-        /* Aumenta o espaço disponível */
-        font-size: 14px;
-    }
-
-    .no-results {
-        font-size: 16px;
-        /* Reduz o tamanho do texto para melhor adaptação */
-        padding: 15px;
-        /* Reduz o espaçamento interno */
     }
 
     .overlay-inner {

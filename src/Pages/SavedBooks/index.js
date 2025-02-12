@@ -2,18 +2,22 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import useAuth from "../../Hooks/useAuth";
 import * as C from "./styles";
-import { useNavigate } from "react-router-dom"; // Importe o hook useNavigate
-import Header from "../../Components/Header/header";
+import { useNavigate } from "react-router-dom";
+import Modal from "../../BooksSearch/Modal"; // Importe o Modal
 
 const SavedBooks = () => {
     const [books, setBooks] = useState([]); // Estado inicial como array vazio
     const [error, setError] = useState("");
     const { token } = useAuth();
-    const navigate = useNavigate(); // Hook para navegação
+    const navigate = useNavigate();
+
+    // Estado para controlar o modal
+    const [showModal, setShowModal] = useState(false);
+    const [selectedBook, setSelectedBook] = useState(null);
 
     // Função para voltar à página inicial
     const handleGoBack = () => {
-        navigate("/"); // Navega para a rota principal (Main.js)
+        navigate("/");
     };
 
     useEffect(() => {
@@ -50,17 +54,28 @@ const SavedBooks = () => {
         }
     };
 
+    // Função para abrir o modal com os detalhes do livro
+    const openModal = (book) => {
+        setSelectedBook(book);
+        setShowModal(true);
+    };
+
+    // Função para fechar o modal
+    const closeModal = () => {
+        setSelectedBook(null);
+        setShowModal(false);
+    };
+
     return (
         <C.BookContainer>
-            <Header />
+            {/* Botão para voltar à página inicial */}
             <C.BackButton onClick={handleGoBack}>Voltar para a página inicial</C.BackButton>
-
             <C.Title>Meus Livros Salvos</C.Title>
             {error && <C.ErrorMessage>{error}</C.ErrorMessage>}
             {books.length > 0 ? (
                 <C.BookList>
                     {books.map((book) => (
-                        <C.BookCard key={book.id}>
+                        <C.BookCard key={book.id} onClick={() => openModal(book)}>
                             {book.thumbnail && (
                                 <C.BookImage src={book.thumbnail} alt={book.title} />
                             )}
@@ -69,7 +84,10 @@ const SavedBooks = () => {
                                 <C.BookAuthor>{book.author}</C.BookAuthor>
                                 <C.BookDescription>{book.description}</C.BookDescription>
                             </C.BookDetails>
-                            <C.DeleteButton onClick={() => deleteBook(book.id)}>
+                            <C.DeleteButton onClick={(e) => {
+                                e.stopPropagation(); // Evita que o clique no botão abra o modal
+                                deleteBook(book.id);
+                            }}>
                                 Excluir
                             </C.DeleteButton>
                         </C.BookCard>
@@ -77,6 +95,25 @@ const SavedBooks = () => {
                 </C.BookList>
             ) : (
                 <C.NoBooksMessage>Nenhum livro salvo.</C.NoBooksMessage>
+            )}
+
+            {/* Modal */}
+            {showModal && selectedBook && (
+                <Modal
+                    show={showModal}
+                    item={{
+                        volumeInfo: {
+                            title: selectedBook.title,
+                            authors: [selectedBook.author],
+                            imageLinks: { smallThumbnail: selectedBook.thumbnail },
+                            publisher: "Editora desconhecida",
+                            publishedDate: "Data desconhecida",
+                            description: selectedBook.description,
+                            previewLink: "#",
+                        },
+                    }}
+                    onClose={closeModal}
+                />
             )}
         </C.BookContainer>
     );

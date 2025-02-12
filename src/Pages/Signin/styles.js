@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const BackButton = styled.button`
   position: absolute;
-  top: 5%;
+  margin-top: 100px;
   right: 5%;
   padding: 10px 20px;
   background-color: #007bff;
@@ -52,7 +52,7 @@ export const Content = styled.div`
 export const Label = styled.label`
   font-weight: 600;
   font-size: 36px;
-  color: #353535;
+  color:rgb(255, 255, 255);
 `;
 
 export const Names = styled.label`
