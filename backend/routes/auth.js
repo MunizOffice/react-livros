@@ -13,7 +13,7 @@ const authenticateToken = (req, res, next) => {
     const token = authHeader && authHeader.split(" ")[1];
     if (!token) return res.status(401).json({ error: "Acesso negado" });
 
-    // Verifica se o token está revogado
+    // Verifica se o token foi revogado
     db.get("SELECT * FROM revoked_tokens WHERE token = ?", [token], (err, revokedToken) => {
         if (err) {
             console.error("Erro ao verificar token revogado:", err.message);

@@ -9,7 +9,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
     console.error("Erro ao conectar ao banco de dados:", err.message);
   } else {
     console.log("Conexão com o banco de dados estabelecida.");
-    // Criar tabelas, se não existirem
+    // Criar tabelas se não existir
     db.run(`
       CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

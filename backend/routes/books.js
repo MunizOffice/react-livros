@@ -20,7 +20,7 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-// Rota para buscar livros salvos pelo usuário
+// Rota para buscar livros salvos 
 router.get("/", authenticateToken, (req, res) => {
     const userId = req.user.userId;
     db.all("SELECT * FROM books WHERE userId = ?", [userId], (err, rows) => {

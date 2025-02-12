@@ -18,7 +18,7 @@ const Main = () => {
     // Função para centralizar tratamento de erros
     const handleError = useCallback((message) => {
         setError(message);
-        setSuggestions([]); // Limpa as sugestões sempre que há um erro
+        setSuggestions([]);
     }, []);
 
     // Função de fetchBooks movida para fora do useEffect
@@ -47,7 +47,7 @@ const Main = () => {
                 .then(setData)
                 .catch(() => handleError("Erro ao carregar os melhores livros."));
         }
-    }, [user, fetchBooks, handleError]); // 'fetchBooks' como dependência
+    }, [user, fetchBooks, handleError]);
 
     // Usa useCallback diretamente dentro de useEffect para evitar warnings
     useEffect(() => {
@@ -63,7 +63,7 @@ const Main = () => {
                     thumbnail: item.volumeInfo.imageLinks?.smallThumbnail,
                 }));
                 setSuggestions(bookSuggestions);
-                setError(""); // Limpa o erro em caso de sucesso
+                setError("");
             } catch (e) {
                 handleError("Não foi possível carregar as sugestões.");
             }
@@ -76,9 +76,9 @@ const Main = () => {
         }
 
         return () => {
-            fetchSuggestions.cancel(); // Limpeza do debounce quando o componente for desmontado
+            fetchSuggestions.cancel();
         };
-    }, [search, user, fetchBooks, handleError]); // 'fetchBooks' como dependência
+    }, [search, user, fetchBooks, handleError]);
 
     // Detecta cliques fora do input e da lista de sugestões para limpar as sugestões
     useEffect(() => {
@@ -116,7 +116,7 @@ const Main = () => {
                 .then((books) => {
                     setData(books || []); // Garantir que setData receba um array vazio caso não haja livros
                     setSuggestions([]);
-                    setError(""); // Limpa o erro em caso de sucesso
+                    setError("");
                 })
                 .catch(() => handleError("Erro ao buscar livros. Tente novamente."));
         }

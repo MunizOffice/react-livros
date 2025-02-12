@@ -10,9 +10,9 @@ export const HeaderContainer = styled.div`
     background-color: rgb(22, 14, 5);
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
     padding: 0 20px;
-    position: fixed; // Fixa o cabeçalho no topo
-    top: 0; // Alinha ao topo da página
-    z-index: 1000; // Garante que o cabeçalho fique acima de outros elementos
+    position: fixed; 
+    top: 0; 
+    z-index: 1000; 
 
     @media (max-width: 768px) {
         height: 100px;  
@@ -21,7 +21,7 @@ export const HeaderContainer = styled.div`
 
 // Título do cabeçalho
 export const HeaderTitle = styled.h2`
-    color: rgb(224, 175, 106); // Adicione o ponto-e-vírgula aqui
+    color: rgb(224, 175, 106); 
     font-size: 3rem; 
     margin: 0; 
     font-weight: bold; 
@@ -69,26 +69,26 @@ export const HeaderButton = styled.button`
 
 // Botão específico para "Favoritos"
 export const FavoriteButton = styled(HeaderButton)`
-    background-color: #ff9800; // Laranja para o botão de favoritos
+    background-color: #ff9800; 
 
     &:hover {
-        background-color: #e68a00; // Escurece ao passar o mouse
+        background-color: #e68a00; 
     }
 
     &:active {
-        background-color: #cc7a00; // Escurece ainda mais ao clicar
+        background-color: #cc7a00; 
     }
 `;
 
 // Botão específico para "Sair"
 export const LogoutButton = styled(HeaderButton)`
-    background-color: #dc3545; // Vermelho para o botão de sair
+    background-color: #dc3545; 
 
     &:hover {
-        background-color: #b02a37; // Escurece ao passar o mouse
+        background-color: #b02a37; 
     }
 
     &:active {
-        background-color: #8f232d; // Escurece ainda mais ao clicar
+        background-color: #8f232d; 
     }
 `;

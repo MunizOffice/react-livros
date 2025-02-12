@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
       setToken(token);
       localStorage.setItem("token", token); // Salva o token no localStorage
       setUser(email); // Armazena o email do usuário logado
-      return null; // Sem erro
+      return null;
     } catch (error) {
       return error.response?.data?.error || "Erro ao fazer login";
     }
@@ -25,14 +25,14 @@ export const AuthProvider = ({ children }) => {
   const signup = async (email, password) => {
     try {
       const response = await axios.post("https://localhost:5443/auth/signup", { email, password });
-      const { token } = response.data; // Extrai o token da resposta
+      const { token } = response.data;
       if (!token) {
         throw new Error("Token não recebido após o cadastro");
       }
       setToken(token); // Armazena o token no estado
       localStorage.setItem("token", token); // Salva o token no localStorage
-      setUser(email); // Define o estado como autenticado
-      return null; // Sem erro
+      setUser(email); // Define como autenticado
+      return null;
     } catch (error) {
       console.error("Erro ao criar conta:", error.message);
       return error.response?.data?.error || "Erro ao criar conta";
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
-      setUser(true); // Define o estado como autenticado
+      setUser(true); // Define como autenticado
     }
   }, []);
 

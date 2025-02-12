@@ -9,9 +9,9 @@ const credentials = { key: privateKey, cert: certificate };
 
 // Porta do servidor
 const PORT_HTTP = process.env.PORT || 5000;
-const PORT_HTTPS = 5443; // Porta padrão para HTTPS
+const PORT_HTTPS = 5443;
 
-// Servidor HTTP (redirecionará para HTTPS)
+// Servidor HTTP - Redirecionará para HTTPS
 const http = require("http");
 http.createServer((req, res) => {
     res.writeHead(301, { Location: `https://${req.headers.host}${req.url}` });

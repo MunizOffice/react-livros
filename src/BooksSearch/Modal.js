@@ -3,7 +3,7 @@ import { IoMdCloseCircle } from "react-icons/io";
 
 const Modal = ({ show, item, onClose }) => {
     if (!show || !item) {
-        return null; // Não renderiza o modal se `item` for undefined
+        return null; // Não vai renderizar o modal se o item for undefined
     }
 
     // Verificações seguras para evitar erros

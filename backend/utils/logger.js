@@ -12,7 +12,7 @@ const logFormat = format.combine(
 
 // Cria o logger
 const logger = createLogger({
-    level: "info", // Define o nível mínimo de logs (info, warn, error)
+    level: "info", // mínimo de logs 
     format: logFormat,
     transports: [
         // Logs no console
@@ -24,9 +24,9 @@ const logger = createLogger({
         new DailyRotateFile({
             filename: "logs/application-%DATE%.log",
             datePattern: "YYYY-MM-DD",
-            zippedArchive: true, // Compacta logs antigos
-            maxSize: "20m", // Tamanho máximo por arquivo
-            maxFiles: "14d", // Mantém logs por 14 dias
+            zippedArchive: true,
+            maxSize: "20m",
+            maxFiles: "14d",
         }),
 
         // Logs de erros específicos

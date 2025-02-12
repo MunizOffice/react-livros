@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Modal from "./Modal"; // Certifique-se de que o caminho do Modal está correto
+import Modal from "./Modal";
 import useAuth from "../Hooks/useAuth";
 
 const Card = ({ book }) => {
     const [show, setShow] = useState(false);
-    const [bookItem, setBookItem] = useState(null); // Inicialize como null
+    const [bookItem, setBookItem] = useState(null);
     const { user } = useAuth();
 
     // Função para salvar o livro no backend
@@ -17,8 +17,8 @@ const Card = ({ book }) => {
                 return;
             }
             const payload = {
-                title: volumeInfo.title, // Título é obrigatório
-                author: volumeInfo.authors?.join(", ") || "Autor Desconhecido", // Autor opcional, com valor padrão
+                title: volumeInfo.title, // Título obrigatório
+                author: volumeInfo.authors?.join(", ") || "Autor Desconhecido", // Autor opcional
                 description: volumeInfo.description,
                 thumbnail: volumeInfo.imageLinks?.smallThumbnail,
             };
@@ -69,7 +69,7 @@ const Card = ({ book }) => {
                             </div>
                         );
                     }
-                    return null; // Adicionar retorno vazio caso o thumbnail seja undefined
+                    return null;
                 })
             ) : (
                 <div className="error-card-container">

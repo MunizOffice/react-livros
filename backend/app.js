@@ -41,7 +41,7 @@ app.use((req, res, next) => {
             logger.info(`Resposta retornada do cache para: ${cacheKey}`);
             return res.json(cachedResponse);
         }
-        // Se não houver cache, armazena a resposta após a execução da rota
+        // Sem o cache vai armazenar a resposta após a execução da rota
         const originalSend = res.send;
         res.send = function (body) {
             cache.set(cacheKey, body);

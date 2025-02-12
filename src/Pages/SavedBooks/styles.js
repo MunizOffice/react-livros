@@ -85,7 +85,7 @@ export const BookImage = styled.img`
 // Detalhes do livro
 export const BookDetails = styled.div`
     text-align: center;
-    flex-grow: 1; // Garante que os detalhes ocupem o espaço disponível
+    flex-grow: 1; 
 `;
 
 // Título do livro
